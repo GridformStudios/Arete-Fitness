@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Temporary internal page — not for public search indexing.
+# This whole Disallow line can be removed once the setup-instructions
+# file is deleted from the repo (see README).
+Disallow: /arete-setup-instructions.html
+
+Sitemap: https://www.aretefitness.com/sitemap.xml

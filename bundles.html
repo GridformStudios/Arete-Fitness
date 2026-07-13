@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arete Fitness — Setup Instructions</title>
+<meta name="description" content="Step-by-step guide to setting up payments, booking, calendar, referrals, and user tracking for Arete Fitness.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --jet-black: #30343f;
+  --ghost-white: #fafaff;
+  --periwinkle: #e4d9ff;
+  --twilight-indigo: #273469;
+  --space-indigo: #1e2749;
+  --paper: #f7f6fb;
+  --paper-alt: #eeecf5;
+  --ink: #1a1d28;
+  --ink-soft: #4a4e60;
+  --ink-mute: #6d7186;
+  --rule: rgba(48, 52, 63, 0.12);
+  --rule-strong: rgba(48, 52, 63, 0.25);
+  --tip-bg: rgba(228, 217, 255, 0.35);
+  --tip-border: #b8a8e0;
+  --warn-bg: #fff4e6;
+  --warn-border: #e0a15a;
+  --cost-bg: #ecf7ee;
+  --cost-border: #6bab77;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 5rem; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--periwinkle); color: var(--space-indigo); }
+
+h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; color: var(--ink); }
+h1 { font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; }
+h2 { font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; }
+h3 { font-weight: 600; line-height: 1.25; }
+h4 { font-weight: 600; line-height: 1.3; }
+
+code, pre, .mono { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; }
+
+/* ---------- LAYOUT ---------- */
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.doc-header {
+  padding: 4rem 1.5rem 2rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+.doc-header .wrap { display: flex; flex-direction: column; gap: 1rem; }
+.doc-eyebrow {
+  font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--twilight-indigo); font-weight: 600;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.doc-eyebrow::before {
+  content: ''; width: 32px; height: 1px; background: var(--twilight-indigo);
+}
+.doc-title {
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  line-height: 1.05; letter-spacing: -0.02em;
+  max-width: 22ch;
+}
+.doc-title em {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic; font-weight: 300;
+  color: var(--twilight-indigo);
+}
+.doc-subtitle {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  max-width: 60ch;
+  margin-top: 0.5rem;
+}
+.doc-meta {
+  display: flex; flex-wrap: wrap; gap: 1rem 2rem;
+  font-size: 0.82rem; color: var(--ink-mute);
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+}
+.doc-meta strong { color: var(--ink); font-weight: 600; }
+
+/* ---------- MAIN LAYOUT ---------- */
+.doc-body {
+  padding: 3rem 0 6rem;
+}
+.doc-body .wrap {
+  display: block;
+}
+.toc {
+  margin-bottom: 3rem;
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1.5rem 1.5rem;
+}
+.toc-title {
+  font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--twilight-indigo); font-weight: 600;
+  margin-bottom: 1rem;
+}
+.toc ol {
+  list-style: none;
+  counter-reset: toc;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4rem;
+}
+.toc li {
+  counter-increment: toc;
+  font-size: 0.92rem;
+  padding-left: 2.25rem;
+  position: relative;
+  line-height: 1.4;
+}
+.toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  position: absolute;
+  left: 0; top: 0.15rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--twilight-indigo);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.toc li.appendix::before {
+  content: '§';
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--twilight-indigo);
+  top: 0;
+}
+.toc a {
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.toc a:hover { color: var(--twilight-indigo); }
+
+/* ---------- CONTENT ---------- */
+.content { max-width: 720px; margin: 0 auto; }
+
+.phase {
+  padding: 3rem 0;
+  border-top: 1px solid var(--rule);
+}
+.phase:first-child { border-top: none; padding-top: 0; }
+.phase-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--twilight-indigo); font-weight: 600;
+  margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.phase-eyebrow-num {
+  background: var(--twilight-indigo);
+  color: white;
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.phase h2 {
+  font-size: clamp(1.7rem, 4.5vw, 2.25rem);
+  margin-bottom: 1rem;
+  max-width: 22ch;
+}
+.phase-intro {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  max-width: 60ch;
+  margin-bottom: 2rem;
+}
+.phase h3 {
+  font-size: 1.25rem;
+  margin: 2.5rem 0 0.75rem;
+}
+.phase h4 {
+  font-size: 1.02rem;
+  margin: 1.75rem 0 0.5rem;
+  color: var(--ink);
+}
+.phase p {
+  margin-bottom: 1rem;
+  color: var(--ink-soft);
+}
+.phase strong { color: var(--ink); font-weight: 600; }
+.phase a {
+  color: var(--twilight-indigo);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-strong);
+  text-underline-offset: 3px;
+}
+.phase a:hover { text-decoration-color: var(--twilight-indigo); }
+
+.phase-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  margin-bottom: 2rem;
+}
+.phase-meta-item {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 1rem;
+  align-items: baseline;
+  font-size: 0.9rem;
+}
+.phase-meta-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--twilight-indigo);
+  font-weight: 600;
+}
+.phase-meta-value { color: var(--ink); }
+
+/* Steps */
+ol.steps {
+  counter-reset: step;
+  list-style: none;
+  margin: 1rem 0 1.5rem;
+  padding-left: 0;
+}
+ol.steps > li {
+  counter-increment: step;
+  padding: 0.5rem 0 0.5rem 2.5rem;
+  position: relative;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+ol.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0; top: 0.55rem;
+  width: 1.5rem; height: 1.5rem;
+  background: var(--twilight-indigo);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+ol.steps ul {
+  margin: 0.5rem 0 0 1rem;
+  padding-left: 1rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+ol.steps ul li { margin: 0.25rem 0; }
+
+/* Callouts */
+.callout {
+  padding: 1rem 1.25rem;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  border-left: 3px solid;
+  font-size: 0.92rem;
+}
+.callout-label {
+  display: inline-block;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+}
+.tip {
+  background: var(--tip-bg);
+  border-left-color: var(--tip-border);
+}
+.tip .callout-label { background: var(--tip-border); color: white; }
+.warn {
+  background: var(--warn-bg);
+  border-left-color: var(--warn-border);
+}
+.warn .callout-label { background: var(--warn-border); color: white; }
+.cost {
+  background: var(--cost-bg);
+  border-left-color: var(--cost-border);
+}
+.cost .callout-label { background: var(--cost-border); color: white; }
+.honest {
+  background: rgba(48, 52, 63, 0.05);
+  border-left-color: var(--jet-black);
+}
+.honest .callout-label { background: var(--jet-black); color: white; }
+
+/* Code */
+code {
+  background: var(--paper-alt);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.88em;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+pre {
+  background: #f0eef8;
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  margin: 1rem 0 1.5rem;
+  border: 1px solid var(--rule);
+}
+pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+}
+
+/* Data tables */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.92rem;
+  background: white;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.data-table th,
+.data-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+}
+.data-table th {
+  background: var(--paper-alt);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--twilight-indigo);
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table td.mono { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+
+/* Regular lists */
+.phase ul.plain {
+  margin: 0.5rem 0 1.25rem 1rem;
+  padding-left: 1rem;
+  color: var(--ink-soft);
+}
+.phase ul.plain li { margin: 0.35rem 0; }
+.phase ul.plain li::marker { color: var(--twilight-indigo); }
+
+/* Anchors */
+.phase[id]::before,
+h3[id]::before {
+  content: '';
+  display: block;
+}
+
+/* Footer */
+.doc-foot {
+  padding: 3rem 0;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  color: var(--ink-mute);
+  font-size: 0.85rem;
+  background: white;
+}
+.doc-foot em {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  color: var(--twilight-indigo);
+}
+
+/* Appendix */
+.appendix {
+  padding: 3rem 0;
+  border-top: 2px solid var(--rule-strong);
+}
+.appendix-eyebrow {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--twilight-indigo);
+  margin-bottom: 0.5rem;
+}
+.appendix h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Print styles */
+@media print {
+  body { background: white; color: black; }
+  .toc { page-break-after: always; }
+  .phase, .appendix { page-break-inside: avoid; }
+  pre { page-break-inside: avoid; }
+  a { color: black; text-decoration: none; }
+  .callout { border: 1px solid #999; }
+}
+
+/* Desktop */
+@media (min-width: 900px) {
+  .doc-header { padding: 6rem 1.5rem 3rem; }
+  .doc-body { padding: 4rem 0 8rem; }
+  .toc {
+    padding: 2rem 2rem;
+    max-width: 900px;
+    margin: 0 auto 3rem;
+  }
+  .toc ol {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 2rem;
+  }
+  .phase-meta {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .phase-meta-item {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    align-items: start;
+  }
+  .phase h2 { font-size: 2.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <div class="wrap">
+    <div class="doc-eyebrow">Setup Guide</div>
+    <h1 class="doc-title">Getting Arete Fitness <em>live.</em></h1>
+    <p class="doc-subtitle">Step-by-step instructions for setting up payments, booking, calendar, referrals, and customer tracking — in the order to actually tackle them.</p>
+    <div class="doc-meta">
+      <div><strong>For:</strong> Alex</div>
+      <div><strong>Read time:</strong> ~25 minutes</div>
+      <div><strong>Setup time:</strong> One focused day, or one week of evenings</div>
+    </div>
+  </div>
+</header>
+
+<div class="doc-body">
+<div class="wrap">
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc-title">Table of Contents</div>
+  <ol>
+    <li><a href="#overview">Overview &amp; the stack</a></li>
+    <li><a href="#phase-1">Set up your business Google Calendar</a></li>
+    <li><a href="#phase-2">Create your Stripe account</a></li>
+    <li><a href="#phase-3">Create products &amp; payment links in Stripe</a></li>
+    <li><a href="#phase-4">Put payment links on your site</a></li>
+    <li><a href="#phase-5">Set up Calendly booking</a></li>
+    <li><a href="#phase-6">Embed the Google Calendar on your site</a></li>
+    <li><a href="#phase-7">Refer-a-friend using Stripe promo codes</a></li>
+    <li><a href="#phase-8">Track customers, bundles, and attendance</a></li>
+    <li class="appendix"><a href="#appendix-troubleshooting">Troubleshooting</a></li>
+    <li class="appendix"><a href="#appendix-migrate">When to migrate to an all-in-one platform</a></li>
+    <li class="appendix"><a href="#appendix-skip">What NOT to worry about right now</a></li>
+  </ol>
+</nav>
+
+<div class="content">
+
+<!-- ============ OVERVIEW ============ -->
+<section class="phase" id="overview">
+  <div class="phase-eyebrow"><span class="phase-eyebrow-num">00</span>Start here</div>
+  <h2>Overview &amp; the stack.</h2>
+  <p class="phase-intro">By the end of this guide, your Arete site will accept card payments, take bookings, show a live schedule, run a referral program, and let you keep track of everyone who buys or books.</p>
+
+  <h3>The accounts you'll need</h3>
+  <ul class="plain">
+    <li><strong>Google account</strong> — for your business calendar. You may already have one; a dedicated Arete Fitness account is cleaner.</li>
+    <li><strong>Stripe</strong> — for accepting card payments. Fees: 2.9% + 30¢ per transaction.</li>
+    <li><strong>Calendly</strong> — for taking bookings. Free tier works for now; paid tier (~$12/mo) unlocks more.</li>
+  </ul>
+
+  <div class="callout tip">
+    <span class="callout-label">Hosting is handled</span>
+    Your developer is taking care of web hosting and your domain &mdash; you don't need to set up or pay for that yourself. When this guide says &ldquo;push it live,&rdquo; that just means handing off the updated file (or committing it, if you've been given repo access).
+  </div>
+
+  <div class="callout cost">
+    <span class="callout-label">Costs</span>
+    <strong>Free to start.</strong> All accounts above have free tiers. The only unavoidable cost is Stripe's per-transaction fee — you pay nothing until a customer pays you. Calendly's paid tier is optional (~$12/mo) and only worth it if the free tier's limits become a problem.
+  </div>
+
+  <h3>Why this order</h3>
+  <p>These phases build on each other. Google Calendar has to exist before Calendly can sync to it. Stripe products have to exist before you can create payment links. Payment links have to exist before your CTA buttons can point to them. Don't skip ahead — you'll get stuck.</p>
+
+  <div class="callout tip">
+    <span class="callout-label">Time budget</span>
+    Set aside a full weekend day, or three weeknight evenings. Phase 2 (Stripe) has a verification wait of 1–3 business days baked in — start it early and do other phases while you wait.
+  </div>
+
+  <h3>What we're intentionally not building</h3>
+  <p>See <a href="#appendix-skip">Appendix: What NOT to worry about</a>. Short version: no custom user accounts, no email marketing automation, no analytics dashboards. You're starting a small local gym, not launching Peloton.</p>
+</section>
+
+<!-- ============ PHASE 1: GOOGLE CALENDAR ============ -->
+<section class="phase" id="phase-1">
+  <div class="phase-eyebrow"><span class="phase-eyebrow-num">01</span>Foundation</div>
+  <h2>Set up your business Google Calendar.</h2>
+  <p class="phase-intro">This is your source of truth for when you're teaching, when you're available, and when you're off. Everything else points to it.</p>
+
+  <div class="phase-meta">
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Time</div>
+      <div class="phase-meta-value">10 minutes</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">You'll need</div>
+      <div class="phase-meta-value">A Google account</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Why now</div>
+      <div class="phase-meta-value">Calendly and your website both point to this calendar</div>
+    </div>
+  </div>
+
+  <h3>Create the calendar</h3>
+  <ol class="steps">
+    <li>Go to <a href="https://calendar.google.com" target="_blank">calendar.google.com</a> and sign in.</li>
+    <li>In the left sidebar, find "Other calendars" and click the <strong>+</strong> next to it.</li>
+    <li>Choose <strong>"Create new calendar"</strong>.</li>
+    <li>Fill in:
+      <ul>
+        <li>Name: <code>Arete Fitness Training</code></li>
+        <li>Description: <code>Training sessions, availability, and events for Arete Fitness</code></li>
+        <li>Time zone: <code>(GMT-08:00) Pacific Time - Los Angeles</code></li>
+      </ul>
+    </li>
+    <li>Click <strong>Create calendar</strong>. Give it a few seconds — it now appears in your sidebar under "My calendars".</li>
+  </ol>
+
+  <h3>Make it public so your website can display it</h3>
+  <ol class="steps">
+    <li>In the left sidebar, hover over <strong>Arete Fitness Training</strong>.</li>
+    <li>Click the three-dot menu that appears, then <strong>"Settings and sharing"</strong>.</li>
+    <li>Scroll to <strong>"Access permissions for events"</strong>.</li>
+    <li>Check <strong>"Make available to public"</strong>. Choose <strong>"See all event details"</strong> so people can read what each event is about (not just "busy").</li>
+    <li>Scroll down to <strong>"Integrate calendar"</strong>.</li>
+    <li>Find <strong>"Calendar ID"</strong> — it looks like a long email address ending in <code>@group.calendar.google.com</code>. Copy this whole string and paste it somewhere safe. You'll need it later.</li>
+  </ol>
+
+  <div class="callout warn">
+    <span class="callout-label">Privacy check</span>
+    "Public" here means anyone with the link can see events on this calendar. Don't put personal appointments here — this is Arete-only. Keep your personal calendar separate.
+  </div>
+
+  <h3>Save these details somewhere safe</h3>
+  <p>Keep a note (in a password manager, or a "Arete Business Info" doc) with:</p>
+  <ul class="plain">
+    <li>Google account email: ______________________</li>
+    <li>Google Calendar ID: ______________________</li>
+  </ul>
+
+  <p>You'll paste this Calendar ID into Calendly and into your website. Both places.</p>
+</section>
+
+<!-- ============ PHASE 2: STRIPE ACCOUNT ============ -->
+<section class="phase" id="phase-2">
+  <div class="phase-eyebrow"><span class="phase-eyebrow-num">02</span>Payments</div>
+  <h2>Create your Stripe account.</h2>
+  <p class="phase-intro">Stripe is how your website will accept card payments. Signup is quick; verification takes a couple of days, so start this early.</p>
+
+  <div class="phase-meta">
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Time</div>
+      <div class="phase-meta-value">20 min signup, 1–3 business days verification</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">You'll need</div>
+      <div class="phase-meta-value">Business bank account, tax ID (EIN or SSN), address, government ID</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Cost</div>
+      <div class="phase-meta-value">Free account; 2.9% + 30¢ per transaction</div>
+    </div>
+  </div>
+
+  <h3>Sign up</h3>
+  <ol class="steps">
+    <li>Go to <a href="https://stripe.com" target="_blank">stripe.com</a> and click <strong>"Start now"</strong>.</li>
+    <li>Enter your Arete business email and a strong password.</li>
+    <li>Verify your email (they send a link).</li>
+    <li>When you land in the Stripe dashboard, you'll see an <strong>"Activate payments"</strong> or <strong>"Complete your account"</strong> banner. Click it.</li>
+    <li>Fill in the business details:
+      <ul>
+        <li>Business type: <strong>Individual / Sole Proprietor</strong> if you haven't formed an LLC yet, <strong>LLC</strong> if you have</li>
+        <li>Business address: your studio address (26923 Fuerte Dr) or your home address</li>
+        <li>Tax ID: your EIN if you have one, otherwise your SSN</li>
+        <li>Bank account: routing + account number for where deposits should go</li>
+      </ul>
+    </li>
+    <li>Upload a government ID when prompted.</li>
+    <li>Submit for verification. Stripe reviews and gets back to you within 1–3 business days.</li>
+  </ol>
+
+  <div class="callout tip">
+    <span class="callout-label">Don't wait to move on</span>
+    While Stripe verifies, keep going with the next phases. You can create products and payment links in <strong>Test mode</strong> immediately — they just can't accept real money until Stripe approves. Toggle "Test mode" in the top-right of the Stripe dashboard.
+  </div>
+
+  <h3>Know the fees</h3>
+  <p>Stripe charges <strong>2.9% + 30¢</strong> per successful card charge. Roughly:</p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>Your price</th><th>Stripe fee</th><th>You net</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>$15 intro</td><td class="mono">$0.74</td><td class="mono">$14.26</td></tr>
+      <tr><td>$35 drop-in</td><td class="mono">$1.32</td><td class="mono">$33.68</td></tr>
+      <tr><td>$60 private</td><td class="mono">$2.04</td><td class="mono">$57.96</td></tr>
+      <tr><td>$130 4-pack</td><td class="mono">$4.07</td><td class="mono">$125.93</td></tr>
+      <tr><td>$245 8-pack</td><td class="mono">$7.41</td><td class="mono">$237.59</td></tr>
+      <tr><td>$350 12-pack</td><td class="mono">$10.45</td><td class="mono">$339.55</td></tr>
+      <tr><td>$200 monthly</td><td class="mono">$6.10</td><td class="mono">$193.90</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout honest">
+    <span class="callout-label">Honest note</span>
+    You may want to bump prices by a few dollars to absorb Stripe fees, or leave them and treat the fees as the cost of accepting cards vs. cash-only. Both are reasonable. Just know that a $35 drop-in nets you $33.68, not $35.
+  </div>
+</section>
+
+<!-- ============ PHASE 3: STRIPE PRODUCTS & PAYMENT LINKS ============ -->
+<section class="phase" id="phase-3">
+  <div class="phase-eyebrow"><span class="phase-eyebrow-num">03</span>Payments</div>
+  <h2>Create products and payment links.</h2>
+  <p class="phase-intro">A <strong>Payment Link</strong> is a URL from Stripe that takes a customer to a checkout page for a specific product. No coding required. You'll create one link per thing you sell, then paste them into your site.</p>
+
+  <div class="phase-meta">
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Time</div>
+      <div class="phase-meta-value">30–45 minutes for all products</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">You'll need</div>
+      <div class="phase-meta-value">Stripe account (test mode is fine)</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Ceiling</div>
+      <div class="phase-meta-value">Payment Links can't enforce bundle usage; that's manual (Phase 8)</div>
+    </div>
+  </div>
+
+  <h3>Create the products</h3>
+  <ol class="steps">
+    <li>In the Stripe dashboard, click <strong>Product catalog</strong> in the left sidebar (or go to <code>dashboard.stripe.com/products</code>).</li>
+    <li>Click <strong>"+ Add product"</strong>.</li>
+    <li>For each product you sell, fill in:
+      <ul>
+        <li>Name (e.g., "8-Session Bundle")</li>
+        <li>Description (e.g., "8 group or private sessions. Valid 90 days.")</li>
+        <li>Price</li>
+        <li>Recurring or one-time (see below)</li>
+      </ul>
+    </li>
+    <li>Save the product.</li>
+    <li>Repeat for every product below.</li>
+  </ol>
+
+  <h3>Your product list</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>Product</th><th>Price</th><th>Billing</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Intro Session</td><td>$15</td><td>One-time</td></tr>
+      <tr><td>Drop-in Session</td><td>$35</td><td>One-time</td></tr>
+      <tr><td>Private 1-on-1 Session</td><td>$60</td><td>One-time</td></tr>
+      <tr><td>Summer Drop-in <em>(August only)</em></td><td>$20</td><td>One-time</td></tr>
+      <tr><td>4-Session Bundle</td><td>$130</td><td>One-time</td></tr>
+      <tr><td>8-Session Bundle</td><td>$245</td><td>One-time</td></tr>
+      <tr><td>12-Session Bundle</td><td>$350</td><td>One-time</td></tr>
+      <tr><td>Monthly Membership</td><td>$200</td><td><strong>Recurring — monthly</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <span class="callout-label">Recurring vs. one-time</span>
+    Only the Monthly Membership is recurring. Everything else is one-time. Get this wrong and your customer either gets billed forever for a bundle, or has to re-pay each month for their membership.
+  </div>
+
+  <h3>Create a Payment Link for each product</h3>
+  <ol class="steps">
+    <li>From the product page, click <strong>"Create payment link"</strong>.</li>
+    <li>Set:
+      <ul>
+        <li>Quantity: fixed to 1 (customer can't buy 12 intro sessions at once)</li>
+        <li>Collect customer info: Name + Email (required — that's how you'll know who paid)</li>
+        <li>After payment: show a confirmation page, or redirect to a "Thanks" page on your site</li>
+      </ul>
+    </li>
+    <li>Click <strong>Create link</strong>.</li>
+    <li>Copy the URL. It'll look something like:
+      <pre><code>https://buy.stripe.com/aBc123XyZ</code></pre>
+    </li>
+    <li>Paste it into a notes doc, labeled with the product name.</li>
+    <li>Repeat for every product.</li>
+  </ol>
+
+  <h3>Store your links safely</h3>
+  <p>Keep a table like this in a notes doc, spreadsheet, or your password manager:</p>
+  <pre><code>Intro Session:       https://buy.stripe.com/____________
+Drop-in Session:     https://buy.stripe.com/____________
+Private 1-on-1:      https://buy.stripe.com/____________
+Summer Drop-in:      https://buy.stripe.com/____________
+4-Session Bundle:    https://buy.stripe.com/____________
+8-Session Bundle:    https://buy.stripe.com/____________
+12-Session Bundle:   https://buy.stripe.com/____________
+Monthly Membership:  https://buy.stripe.com/____________</code></pre>
+
+  <div class="callout tip">
+    <span class="callout-label">Test each link</span>
+    Before going live, open each link in a browser. Verify the product name, price, and billing frequency look right. In test mode, you can complete a fake purchase using card number <code>4242 4242 4242 4242</code>, any future expiration, any 3-digit CVC.
+  </div>
+</section>
+
+<!-- ============ PHASE 4: PAYMENT LINKS ON SITE ============ -->
+<section class="phase" id="phase-4">
+  <div class="phase-eyebrow"><span class="phase-eyebrow-num">04</span>Integration</div>
+  <h2>Put payment links on your site.</h2>
+  <p class="phase-intro">Right now, every "Book" and "Reserve" button on the site points to the Contact page. You'll swap those to point at Stripe checkout instead.</p>
+
+  <div class="phase-meta">
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Time</div>
+      <div class="phase-meta-value">15 minutes</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">You'll need</div>
+      <div class="phase-meta-value">Your Stripe payment link URLs, a text editor for the HTML file</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Difficulty</div>
+      <div class="phase-meta-value">Find &amp; replace</div>
+    </div>
+  </div>
+
+  <h3>What to change</h3>
+  <p>In the HTML file, find each pricing button that currently looks like:</p>
+  <pre><code>&lt;a class="btn btn-secondary" data-nav="contact"&gt;Reserve 8-pack&lt;/a&gt;</code></pre>
+
+  <p>And change it to:</p>
+  <pre><code>&lt;a class="btn btn-secondary" href="https://buy.stripe.com/YOUR_8PACK_LINK" target="_blank" rel="noopener"&gt;Reserve 8-pack&lt;/a&gt;</code></pre>
+
+  <p>Key changes:</p>
+  <ul class="plain">
+    <li>Remove <code>data-nav="contact"</code> (that was for internal navigation).</li>
+    <li>Add <code>href="..."</code> with the real Stripe link.</li>
+    <li>Add <code>target="_blank" rel="noopener"</code> — this opens checkout in a new tab so people don't lose your site.</li>
+  </ul>
+
+  <h3>All the buttons to update</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>Where</th><th>Button label</th><th>Points to</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Individual Sessions page</td><td>Book intro</td><td>Intro Session link</td></tr>
+      <tr><td>Individual Sessions page</td><td>Book private</td><td>Private 1-on-1 link</td></tr>
+      <tr><td>Bundles page</td><td>Reserve 4-pack</td><td>4-Session Bundle link</td></tr>
+      <tr><td>Bundles page</td><td>Reserve 8-pack</td><td>8-Session Bundle link</td></tr>
+      <tr><td>Bundles page</td><td>Reserve 12-pack</td><td>12-Session Bundle link</td></tr>
+      <tr><td>Bundles page</td><td>Start membership</td><td>Monthly Membership link</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout honest">
+    <span class="callout-label">The drop-in is different</span>
+    The "See schedule" button on the Drop-in card intentionally leads to the schedule page — not directly to checkout. Drop-in customers usually want to see if there's a session at a time they can make, THEN pay. When you add Calendly (Phase 5), that button flow becomes: See schedule → click session → Calendly → pay via Stripe. Don't attach a payment link to the "See schedule" button.
+  </div>
+
+  <h3>Save, upload, and test</h3>
+  <ol class="steps">
+    <li>Save the HTML file after your edits.</li>
+    <li>Push your changes so they go live (your developer is handling hosting &mdash; hand them the updated file, or commit it if you have repo access).</li>
+    <li>Visit each pricing button on the live site. Click. Confirm it opens the right Stripe checkout in a new tab.</li>
+    <li>If Stripe is still in test mode, complete a test purchase with card <code>4242 4242 4242 4242</code> to make sure the flow works end-to-end.</li>
+    <li>Once Stripe verifies your account, flip out of test mode. Real payments start flowing.</li>
+  </ol>
+</section>
+
+<!-- ============ PHASE 5: CALENDLY ============ -->
+<section class="phase" id="phase-5">
+  <div class="phase-eyebrow"><span class="phase-eyebrow-num">05</span>Booking</div>
+  <h2>Set up Calendly booking.</h2>
+  <p class="phase-intro">Calendly lets people book time on your calendar without emailing you. It syncs to Google Calendar so it knows when you're free.</p>
+
+  <div class="phase-meta">
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Time</div>
+      <div class="phase-meta-value">30 minutes</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">You'll need</div>
+      <div class="phase-meta-value">Your Google Calendar from Phase 1</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Cost</div>
+      <div class="phase-meta-value">Free tier limited; paid is ~$12/mo</div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-label">Calendly's real limits for a gym</span>
+    Calendly is designed for one-on-one appointments. It <strong>does not</strong> track "you've used 3 of your 8 bundle sessions" — that's manual for now (see Phase 8). It also can't take payments directly on the free tier. What it CAN do is let people pick a time and put it on your calendar. That's the piece worth solving here.
+  </div>
+
+  <h3>Sign up and connect Google Calendar</h3>
+  <ol class="steps">
+    <li>Go to <a href="https://calendly.com" target="_blank">calendly.com</a> and sign up with your Arete email.</li>
+    <li>During onboarding, choose <strong>"Connect Google Calendar"</strong> and sign in with the same Google account you used in Phase 1.</li>
+    <li>When it asks which calendar to check for conflicts, select <strong>Arete Fitness Training</strong> (and your personal calendar, so double-bookings don't happen).</li>
+    <li>When it asks which calendar to add new bookings to, select <strong>Arete Fitness Training</strong>.</li>
+    <li>Set your timezone: <strong>Pacific Time</strong>.</li>
+  </ol>
+
+  <h3>Set your general availability</h3>
+  <ol class="steps">
+    <li>Go to the <strong>Availability</strong> tab (top nav).</li>
+    <li>Set your working hours. Example: Mon–Fri 6am–8pm, Sat 8am–12pm.</li>
+    <li>Add buffer time before/after appointments: 15 minutes each. Prevents back-to-back stress.</li>
+    <li>Set minimum scheduling notice: 12 hours. Nobody books a 6am session at 4:30am.</li>
+  </ol>
+
+  <h3>Create your Event Types</h3>
+  <p>An "Event Type" is a bookable service. You'll create two.</p>
+
+  <h4>Private 1-on-1 Session</h4>
+  <ol class="steps">
+    <li>Click <strong>+ Create</strong> → <strong>One-on-One</strong>.</li>
+    <li>Name: <code>Private 1-on-1 Session</code></li>
+    <li>Duration: <code>45 minutes</code></li>
+    <li>Location: In person, address <code>26923 Fuerte Dr, Lake Forest, CA 92630</code></li>
+    <li>Availability: whenever your general availability is open</li>
+    <li>Custom questions: Ask "What are you hoping to work on?" so you can prep</li>
+    <li>Save. Copy the booking link — looks like <code>calendly.com/yourname/private-session</code></li>
+  </ol>
+
+  <h4>Group Session (drop-in / bundle use)</h4>
+  <p>Group sessions on Calendly's free tier are limited. Two options:</p>
+
+  <ul class="plain">
+    <li><strong>Option A:</strong> Use "Group Event" (free tier allows this) — one-time slot with a capacity limit (e.g., 8 attendees). Good for one-off classes but you have to create each time slot manually.</li>
+    <li><strong>Option B:</strong> Upgrade to <strong>Calendly Standard ($12/mo)</strong> which has better recurring group booking.</li>
+  </ul>
+
+  <p>For starting out, Option A is fine. You'll create a group event for each recurring time slot:</p>
+
+  <ol class="steps">
+    <li>Click <strong>+ Create</strong> → <strong>Group Event</strong>.</li>
+    <li>Name: <code>Mon 6am Strength &amp; Conditioning</code> (specific — you'll create one per weekly slot)</li>
+    <li>Duration: <code>60 minutes</code></li>
+    <li>Location: In person, address as above</li>
+    <li>Maximum invitees: capacity of the room (say, 8)</li>
+    <li>Available times: Only Mondays at 6am (use Calendly's "Set specific date ranges" or repeat weekly)</li>
+    <li>Save. Copy the link.</li>
+    <li>Repeat for each weekly slot: Mon 5:30pm, Wed 6am, Fri 6am, Sat 9am, etc.</li>
+  </ol>
+
+  <div class="callout tip">
+    <span class="callout-label">Faster alternative</span>
+    If creating 5 separate weekly slots feels tedious, consider Acuity Scheduling instead of Calendly — it handles recurring class schedules better out of the box. Costs about the same. Just know that if you switch tools, you'll re-do this phase.
+  </div>
+</section>
+
+<!-- ============ PHASE 6: EMBED GOOGLE CALENDAR ============ -->
+<section class="phase" id="phase-6">
+  <div class="phase-eyebrow"><span class="phase-eyebrow-num">06</span>Integration</div>
+  <h2>Embed the Google Calendar on your site.</h2>
+  <p class="phase-intro">The Schedule page currently shows a demo calendar (US Holidays). You'll swap it for your real Arete Fitness Training calendar.</p>
+
+  <div class="phase-meta">
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Time</div>
+      <div class="phase-meta-value">10 minutes</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">You'll need</div>
+      <div class="phase-meta-value">Your Calendar ID from Phase 1</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Difficulty</div>
+      <div class="phase-meta-value">Copy-paste one URL</div>
+    </div>
+  </div>
+
+  <h3>Build your embed URL</h3>
+  <p>Take your Calendar ID (from Phase 1). It should look like:</p>
+  <pre><code>abc123xyz456@group.calendar.google.com</code></pre>
+
+  <p>Now build this URL, replacing <code>YOUR_CALENDAR_ID</code> with yours — but URL-encoded (replace <code>@</code> with <code>%40</code>):</p>
+  <pre><code>https://calendar.google.com/calendar/embed?src=YOUR_CALENDAR_ID&amp;ctz=America%2FLos_Angeles&amp;mode=MONTH&amp;wkst=1&amp;hl=en&amp;showTitle=0&amp;showNav=1&amp;showPrint=0&amp;showTabs=1&amp;showCalendars=0&amp;showTz=0</code></pre>
+
+  <p>Example: if your Calendar ID is <code>arete123@group.calendar.google.com</code>, replace it in the URL as <code>arete123%40group.calendar.google.com</code>.</p>
+
+  <div class="callout tip">
+    <span class="callout-label">Easier way</span>
+    In Google Calendar → Settings for your Arete calendar → scroll to "Integrate calendar" → find "Embed code". Google gives you a full <code>&lt;iframe&gt;</code> ready to copy. Just take the <code>src=""</code> value from it and drop it in place of the demo URL. Add <code>&amp;mode=MONTH</code> if it's not already there.
+  </div>
+
+  <h3>Swap the URL on your site</h3>
+  <ol class="steps">
+    <li>Open the HTML file in a text editor.</li>
+    <li>Find the Schedule page section (search for <code>id="page-schedule"</code>).</li>
+    <li>You'll see an <code>&lt;iframe&gt;</code> with a <code>src="..."</code> pointing to the US Holidays calendar.</li>
+    <li>Replace that <code>src</code> value with your Arete calendar's URL from above.</li>
+    <li>Save the file and push it live (hand it to your developer, or commit it if you have repo access).</li>
+    <li>Visit the Schedule page. You should see your calendar — empty at first, since you haven't added events yet.</li>
+  </ol>
+
+  <h3>Add events to your calendar</h3>
+  <p>Every training session, private appointment, and closure day gets added to <strong>Arete Fitness Training</strong> in Google Calendar. Recurring events save time:</p>
+  <ol class="steps">
+    <li>Open Google Calendar.</li>
+    <li>Click a time slot (say, Monday 6am).</li>
+    <li>Name: <code>Group Strength &amp; Conditioning</code></li>
+    <li>Guests: leave empty (this is a public class, not an invited meeting)</li>
+    <li>Location: paste the studio address</li>
+    <li>Under "Does not repeat", change to <strong>Weekly on Monday</strong>. Choose end date "Never" or set an end date.</li>
+    <li>Save.</li>
+  </ol>
+
+  <p>Repeat for each recurring session. Adjust individual instances (e.g., if you're closed a specific week) by clicking that event and choosing "This event" vs "Following events".</p>
+
+  <div class="callout warn">
+    <span class="callout-label">Don't remove the placeholder note yet</span>
+    Until your calendar has real events, the placeholder note under the calendar helps visitors understand what they're looking at. Once you have events populated, edit the HTML and remove that placeholder note.
+  </div>
+</section>
+
+<!-- ============ PHASE 7: REFER-A-FRIEND ============ -->
+<section class="phase" id="phase-7">
+  <div class="phase-eyebrow"><span class="phase-eyebrow-num">07</span>Growth</div>
+  <h2>Refer-a-friend using Stripe promo codes.</h2>
+  <p class="phase-intro">Your program: friend gets $5 off their first purchase, referrer gets 20% off their next. Stripe promo codes handle the discount math. You handle the referral tracking manually.</p>
+
+  <div class="phase-meta">
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Time</div>
+      <div class="phase-meta-value">20 minutes to set up, ongoing tracking</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">You'll need</div>
+      <div class="phase-meta-value">Stripe active, a Google Sheet for tracking</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Automation ceiling</div>
+      <div class="phase-meta-value">Real automated referrals need paid tools (see below)</div>
+    </div>
+  </div>
+
+  <h3>Create the two promo codes in Stripe</h3>
+
+  <h4>Friend's $5 off code</h4>
+  <ol class="steps">
+    <li>In Stripe dashboard, go to <strong>Products</strong> → <strong>Coupons</strong> (or search "coupons" in the top bar).</li>
+    <li>Click <strong>+ New coupon</strong>.</li>
+    <li>Fill in:
+      <ul>
+        <li>Type: <strong>Amount off</strong> — $5.00 USD</li>
+        <li>Duration: <strong>Once</strong> (only applies to one purchase)</li>
+        <li>ID: <code>FRIEND5</code></li>
+        <li>Maximum redemptions: leave blank (unlimited) or cap it if you want to control cost</li>
+      </ul>
+    </li>
+    <li>Click <strong>Create coupon</strong>.</li>
+    <li>Now create a <strong>Promotion code</strong> for it — Coupons are internal, Promo codes are what customers type at checkout. Click "Create promotion code" attached to the coupon.</li>
+    <li>Code: <code>FRIEND5</code>. Set active. Save.</li>
+  </ol>
+
+  <h4>Referrer's 20% off code</h4>
+  <ol class="steps">
+    <li>Same process. + New coupon.</li>
+    <li>Type: <strong>Percentage off</strong> — 20%</li>
+    <li>Duration: <strong>Once</strong></li>
+    <li>ID: <code>REFER20</code></li>
+    <li>Create the promo code with the same name <code>REFER20</code>.</li>
+    <li>Save.</li>
+  </ol>
+
+  <h3>Enable promo codes on your Payment Links</h3>
+  <p>By default, Payment Links don't accept promo codes. Turn that on:</p>
+  <ol class="steps">
+    <li>Go to <strong>Payments</strong> → <strong>Payment Links</strong>.</li>
+    <li>Click each of your payment links.</li>
+    <li>Under "Advanced options", check <strong>"Allow promotion codes"</strong>.</li>
+    <li>Save. Repeat for every link.</li>
+  </ol>
+
+  <h3>The workflow — no code, just process</h3>
+  <p>Since Stripe doesn't know who referred whom, you track it:</p>
+
+  <ol class="steps">
+    <li><strong>Existing customer says "I want to refer my friend."</strong></li>
+    <li>You tell them: "Great — have your friend use code <code>FRIEND5</code> at checkout. It gives them $5 off. Once they've paid, message me and I'll give you your 20% code for your next purchase."</li>
+    <li>Your friend uses <code>FRIEND5</code>, gets $5 off.</li>
+    <li>You confirm the payment (Stripe → Payments → search their email or name).</li>
+    <li>You message the referrer: "Your friend signed up! Use code <code>REFER20</code> on your next purchase for 20% off. It's active until [date, say 60 days from now]."</li>
+    <li>Log both in your tracking sheet (see below).</li>
+  </ol>
+
+  <div class="callout warn">
+    <span class="callout-label">Why this manual — you can't automate on the cheap</span>
+    Real automated referrals (unique codes per referrer, auto-issue rewards) need paid tools like <strong>GrowSurf</strong> or <strong>Referral Rock</strong> — $50–200/month. For a small local gym, manual is fine until you have 50+ regular customers. Then reconsider.
+  </div>
+
+  <h3>Track referrals in a Google Sheet</h3>
+  <p>Simple template with these columns:</p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>Date</th><th>Referrer</th><th>Friend</th><th>Friend paid</th><th>REFER20 issued</th><th>REFER20 used</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="mono">2026-08-05</td><td>Jane D.</td><td>Sarah M.</td><td>Yes ($15 intro)</td><td>Yes (2026-08-06)</td><td>No</td></tr>
+      <tr><td class="mono">2026-08-10</td><td>Mike R.</td><td>Tom K.</td><td>Yes ($130 4-pack)</td><td>Yes (2026-08-11)</td><td>Yes (2026-09-01)</td></tr>
+    </tbody>
+  </table>
+
+  <p>Once a month, review this sheet. If a referrer hasn't used their 20% code within 60 days, drop them a friendly reminder.</p>
+
+  <div class="callout honest">
+    <span class="callout-label">Pricing incentive check</span>
+    Because your 20% referral perk now matches the 6-person group discount and beats the 4-person one (10%), a customer with 4 friends is better off using the referral than the group discount. That's fine — but you might see fewer 4-person group signups as a result. Watch for this in the first few months.
+  </div>
+</section>
+
+<!-- ============ PHASE 8: TRACKING ============ -->
+<section class="phase" id="phase-8">
+  <div class="phase-eyebrow"><span class="phase-eyebrow-num">08</span>Operations</div>
+  <h2>Track customers, bundles, and attendance.</h2>
+  <p class="phase-intro">Two questions to always be able to answer: <strong>Who has paid me for what?</strong> and <strong>Who has sessions left in their bundle?</strong> The first is Stripe. The second is a spreadsheet.</p>
+
+  <div class="phase-meta">
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Time</div>
+      <div class="phase-meta-value">30 min to set up, 5 min per week to maintain</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">You'll need</div>
+      <div class="phase-meta-value">Google Sheets, Stripe, Calendly</div>
+    </div>
+    <div class="phase-meta-item">
+      <div class="phase-meta-label">Ceiling</div>
+      <div class="phase-meta-value">Manual bundle tracking scales to ~50 clients. Then migrate (see Appendix)</div>
+    </div>
+  </div>
+
+  <h3>Where each piece of data lives</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>Data</th><th>Lives in</th><th>How to find it</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Who paid, when, how much</td><td>Stripe</td><td>Dashboard → Customers</td></tr>
+      <tr><td>Who booked what session</td><td>Calendly + Google Calendar</td><td>Calendly Scheduled Events + your calendar</td></tr>
+      <tr><td>Bundle sessions remaining</td><td>Your Google Sheet</td><td>You maintain manually</td></tr>
+      <tr><td>Attendance (who showed)</td><td>Your Google Sheet</td><td>You mark after each session</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Build a client tracking sheet</h3>
+  <p>Create a new Google Sheet: <strong>Arete Clients 2026</strong>. Tabs:</p>
+
+  <h4>Tab 1 — Clients</h4>
+  <p>One row per client. Columns:</p>
+  <ul class="plain">
+    <li>Name</li>
+    <li>Email (from Stripe checkout)</li>
+    <li>Phone</li>
+    <li>Emergency contact</li>
+    <li>Signed waiver (Yes/No + date)</li>
+    <li>First session date</li>
+    <li>Notes (injuries, goals, anything relevant)</li>
+  </ul>
+
+  <h4>Tab 2 — Bundle Balances</h4>
+  <p>One row per active bundle. Columns:</p>
+  <ul class="plain">
+    <li>Client name</li>
+    <li>Bundle type (4-pack, 8-pack, 12-pack, Monthly)</li>
+    <li>Purchase date</li>
+    <li>Expiration date (90 days from purchase, or end of month for monthly)</li>
+    <li>Sessions purchased</li>
+    <li>Sessions used</li>
+    <li>Sessions remaining</li>
+    <li>Stripe payment reference (link to Stripe payment)</li>
+  </ul>
+
+  <h4>Tab 3 — Attendance Log</h4>
+  <p>One row per session attended. Columns:</p>
+  <ul class="plain">
+    <li>Date</li>
+    <li>Session (e.g., "Mon 6am S&amp;C")</li>
+    <li>Client name</li>
+    <li>Payment source (drop-in / bundle / monthly)</li>
+    <li>Notes (e.g., "missed warm-up", "first time on deadlifts")</li>
+  </ul>
+
+  <h3>Weekly routine (5 minutes)</h3>
+  <ol class="steps">
+    <li>After each session, jot attendees in the Attendance Log tab.</li>
+    <li>For each attendee using a bundle, decrement their "Sessions remaining" in the Bundle Balances tab.</li>
+    <li>Once a week, check Stripe Payments for new purchases. Add new bundles to the Bundle Balances tab.</li>
+  </ol>
+
+  <h3>Monthly reconciliation (15 minutes)</h3>
+  <ol class="steps">
+    <li>Open Stripe Payments and filter to last month.</li>
+    <li>Total: does it match what your sheet says clients bought?</li>
+    <li>Check for bundles nearing expiration (within 30 days, sessions still remaining). Message those clients.</li>
+    <li>Check Monthly Memberships — anyone who cancelled? Anyone whose card failed? Follow up.</li>
+    <li>Cross-check attendance total with sessions used across all bundles. If off by more than a couple, find the error.</li>
+  </ol>
+
+  <div class="callout tip">
+    <span class="callout-label">Automation option</span>
+    Once you're comfortable, Zapier or Make.com can watch for new Stripe payments and automatically create rows in your Google Sheet. Costs about $20/mo. Worth it around client #20 or #30 when you stop wanting to type Stripe data into a sheet by hand.
+  </div>
+</section>
+
+<!-- ================ APPENDIX ================ -->
+<section class="appendix" id="appendix-troubleshooting">
+  <div class="appendix-eyebrow">Appendix A</div>
+  <h2>Troubleshooting.</h2>
+
+  <h3>The Stripe payment link opens, but the price is wrong</h3>
+  <p>You probably edited the product in Stripe after creating the payment link, but the link cached the old price. Delete the payment link and create a new one from the updated product.</p>
+
+  <h3>Calendly says "This event type isn't available"</h3>
+  <p>Your Google Calendar has an all-day event blocking the day, or your general availability doesn't cover that time. Check Google Calendar for blockers.</p>
+
+  <h3>The calendar embed on my site shows "Not found" or is blank</h3>
+  <p>Two likely causes: (1) You forgot to make the calendar public (Phase 1, step 4). Go back and re-check. (2) Your Calendar ID isn't URL-encoded correctly — the <code>@</code> must be <code>%40</code>. Double-check the src URL.</p>
+
+  <h3>Someone paid but didn't book — how do I know?</h3>
+  <p>You don't automatically. In Stripe, add a "success URL" to each payment link that redirects them to your Calendly booking page after payment. That way people who buy are pushed to book immediately.</p>
+
+  <h3>A referral code got shared publicly and now everyone's using it</h3>
+  <p>In Stripe, edit the promotion code and set a <strong>Max redemptions</strong>. Or deactivate the code and issue individually named ones per referrer (like <code>REFER20-JANE</code>).</p>
+
+  <h3>My drop-in customer paid for a "Drop-in" but wants to use their session next Tuesday</h3>
+  <p>That's fine — a drop-in is a one-time payment for one session, timing is up to them. Log it in your Attendance sheet when they show up.</p>
+</section>
+
+<section class="appendix" id="appendix-migrate">
+  <div class="appendix-eyebrow">Appendix B</div>
+  <h2>When to migrate to an all-in-one platform.</h2>
+
+  <p>The stack in this guide (Stripe + Calendly + Google Calendar + Sheet) is deliberately simple and cheap. It has a real ceiling. Signs you've hit it:</p>
+
+  <ul class="plain">
+    <li><strong>You have more than 30–50 regular clients</strong> and manually tracking bundle balances takes more than 30 min/week.</li>
+    <li><strong>Clients are frustrated they can't self-serve</strong> — they want to log in, see their remaining sessions, book, and pay all in one place.</li>
+    <li><strong>You're hiring another coach</strong> and need to track which coach ran which session, and pay them accordingly.</li>
+    <li><strong>You want automated no-show / late-cancellation fees</strong> — hard to enforce manually.</li>
+    <li><strong>You want a native mobile app</strong> for clients.</li>
+  </ul>
+
+  <h3>Platforms to look at</h3>
+  <ul class="plain">
+    <li><strong>Punchpass</strong> — cheapest ($40–80/mo). Focused specifically on class packs / punch cards. Good fit if bundles are your main product.</li>
+    <li><strong>Acuity Scheduling</strong> (Squarespace) — $23–50/mo. Better than Calendly for recurring class scheduling.</li>
+    <li><strong>WellnessLiving</strong> — $80–200/mo. Full-featured. Owns bookings, payments, memberships, client portal.</li>
+    <li><strong>Mindbody</strong> — $130+/mo. The industry standard. Expensive. Only worth it at real scale.</li>
+    <li><strong>Vagaro</strong> — $30–90/mo. Popular alternative to Mindbody, cheaper.</li>
+  </ul>
+
+  <div class="callout honest">
+    <span class="callout-label">Migration reality</span>
+    Migrating clients, bundles, and history to a new platform is annoying. Do it once, do it well, and try to pick a platform you'll use for years. Get a demo of two or three before committing. Your existing Stripe account can usually be connected to any of them.
+  </div>
+</section>
+
+<section class="appendix" id="appendix-skip">
+  <div class="appendix-eyebrow">Appendix C</div>
+  <h2>What NOT to worry about right now.</h2>
+
+  <p>Every one of these is a real thing you'll eventually want. None of them is worth setting up in the first six months. Focus on the guide above; come back to these when the basics are humming.</p>
+
+  <h3>Custom client accounts / login system</h3>
+  <p>Building "sign up, log in, see your bundle balance" is a real backend project (weeks of work). All-in-one platforms (Appendix B) include this. Don't build it yourself.</p>
+
+  <h3>Automated email marketing</h3>
+  <p>Mailchimp, ConvertKit, Klaviyo. Real value when you have 100+ people to email. Skip until then. Meanwhile, a monthly BCC'd email from your Gmail is fine.</p>
+
+  <h3>Analytics dashboards</h3>
+  <p>Google Analytics, Plausible, Fathom. Nice to know how many people visit the site, but you don't need it to run the business. Add it after you've made your first 10 sales.</p>
+
+  <h3>SEO and content marketing</h3>
+  <p>Blog posts, keyword research, backlinks. This pays off in 6–12 months, not next week. Meanwhile, Instagram and word of mouth get you your first 20 clients.</p>
+
+  <h3>Instagram feed on your website</h3>
+  <p>Requires paid third-party embed tools (EmbedSocial, LightWidget, ~$10/mo). Skip until people specifically ask.</p>
+
+  <h3>Custom domain email</h3>
+  <p>Nice to have (hello@aretefitness.com is more professional than areteFitness@gmail.com). Google Workspace is $7/user/mo. Do it once you have paying customers.</p>
+</section>
+
+</div>
+</div>
+</div>
+
+<footer class="doc-foot">
+  <div class="wrap">
+    <p>Written for <em>Alex</em> · Arete Fitness setup guide · Keep this doc handy — you'll refer back to it.</p>
+  </div>
+</footer>
+
+</body>
+</html>
