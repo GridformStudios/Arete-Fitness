@@ -870,6 +870,7 @@ a { color: inherit; }
   text-decoration-thickness: 2px;
 }
 .is-coming-soon .bundle-was { display: none; }
+.is-coming-soon .coming-soon-badge { margin-top: 1.5rem; }
 .coming-soon-badge {
   display: inline-block;
   align-self: flex-start;
