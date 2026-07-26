@@ -84,11 +84,10 @@ portrait-orientation and roughly 1600px wide.
 with the real domain. It appears in canonical tags, Open Graph tags, the
 JSON-LD structured data, `sitemap.xml`, and `robots.txt`.
 
-**2. Demo contact info.** Replace these — they appear in `contact.html` AND in
-the JSON-LD on every page. Fake contact info in structured data is worse than
-none.
-- Phone: `(555) 555-0100`
-- Email: `hello@aretefitness.com`
+**2. Contact info is real** — phone `(510) 586-8332` and email
+`aretefitness26@gmail.com`, in both `contact.html` and the JSON-LD on every
+page. (The `(555) 555-0100` strings still in `book.html` are *input
+placeholders* showing people the expected phone format — leave those.)
 
 **3. Still placeholder** (all visibly badged on-page):
 - Instagram / X links in `contact.html`
@@ -175,3 +174,20 @@ confirm it loads — that is enough to know the file was picked up.
 
 To add a new page: create `newpage.html`, add a line to `_redirects`
 (`/newpage  /newpage.html  200`), and link to it as `/newpage`.
+
+
+---
+
+## Asset paths
+
+Every reference to the stylesheet and to `assets/` is **root-relative**
+(`/styles.css`, `/assets/hero-1.jpg`) rather than relative (`styles.css`,
+`assets/hero-1.jpg`).
+
+This matters with clean URLs. A relative path is resolved against the current
+address, so on a page served at `/about/` a relative `assets/hero-1.jpg` would
+be looked up at `/about/assets/hero-1.jpg` and 404 — which shows up as missing
+images and, if the stylesheet is the file that fails, an unstyled page.
+
+Root-relative paths always resolve from the site root, so they work no matter
+what shape the URL takes. Keep the leading `/` when adding new images.
