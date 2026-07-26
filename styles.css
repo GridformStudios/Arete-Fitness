@@ -1,5 +1,5 @@
 :root {
-  --hero-bg: url("assets/hero.jpg");
+  --hero-bg: url("assets/backdrop.jpg");
   --jet-black: #30343f;
   --ghost-white: #fafaff;
   --periwinkle: #e4d9ff;
@@ -114,7 +114,7 @@ a { color: inherit; }
   padding: 7rem 1.5rem 3rem;
   display: flex; flex-direction: column; justify-content: center;
   overflow: hidden;
-  background: transparent;
+  background: var(--space-indigo);
 }
 .hero-greek {
   position: absolute;
@@ -127,9 +127,9 @@ a { color: inherit; }
   letter-spacing: -0.02em;
   line-height: 0.9;
   user-select: none; pointer-events: none;
-  z-index: 0;
+  z-index: 2;
 }
-.hero-inner { position: relative; z-index: 1; }
+.hero-inner { position: relative; z-index: 2; }
 .hero-primary { display: flex; flex-direction: column; }
 .hero-secondary { display: flex; margin-top: 2rem; }
 .eyebrow {
@@ -219,40 +219,6 @@ a { color: inherit; }
 .btn-secondary:hover { border-color: var(--periwinkle); background: rgba(228, 217, 255, 0.1); }
 .btn svg { flex-shrink: 0; }
 
-/* ---------- SETUP-INSTRUCTIONS TEMPORARY BANNER ---------- */
-.setup-band {
-  padding: 3.5rem 1.5rem;
-  border-top: 1px solid var(--peri-hair);
-  display: flex;
-  justify-content: center;
-}
-.setup-band-inner {
-  max-width: 620px;
-  width: 100%;
-  text-align: center;
-  background: rgba(39, 52, 105, 0.75);
-  border: 1.5px dashed var(--periwinkle);
-  border-radius: 8px;
-  padding: 2.25rem 1.75rem;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.setup-band-tag {
-  display: inline-block;
-  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--space-indigo); font-weight: 700;
-  background: var(--periwinkle);
-  padding: 0.3rem 0.65rem; border-radius: 2px;
-  margin-bottom: 1rem;
-}
-.setup-band-inner h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
-.setup-band-inner p {
-  color: var(--peri-dim); font-size: 0.92rem;
-  margin-bottom: 1.5rem; max-width: 46ch;
-  margin-left: auto; margin-right: auto;
-}
-
-/* ---------- PAGE SECTIONS ---------- */
 .page-section {
   padding: 7rem 1.5rem 5rem;
   min-height: 100vh; min-height: 100dvh;
@@ -576,17 +542,21 @@ a { color: inherit; }
 /* ---------- ABOUT ---------- */
 .about-cols { display: flex; flex-direction: column; gap: 2.5rem; }
 .coach-portrait {
-  aspect-ratio: 4 / 5;
-  background:
-    radial-gradient(ellipse at 30% 20%, rgba(228, 217, 255, 0.2), transparent 60%),
-    linear-gradient(135deg, var(--twilight-indigo), var(--space-indigo));
+  aspect-ratio: 3 / 4;
+  max-width: 340px;
+  width: 100%;
   border: 1px solid var(--peri-hair);
   border-radius: 6px;
-  display: flex; align-items: flex-end;
-  padding: 1.5rem;
-  color: var(--peri-dim);
-  font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
-  max-width: 460px;
+  overflow: hidden;
+  background: var(--twilight-indigo);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+.coach-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
 }
 .coach-content {
   background: rgba(30, 39, 73, 0.55);
@@ -742,7 +712,6 @@ a { color: inherit; }
   .hero { padding: 8rem 2.5rem 4rem; }
   .page-section { padding: 9rem 2.5rem 6rem; }
   .preview-section { padding: 7rem 2.5rem; }
-  .setup-band { padding: 5rem 2.5rem; }
   .footer { padding: 4rem 2.5rem 2rem; }
 
   .desktop-nav { display: flex; gap: 2rem; align-items: center; }
@@ -783,4 +752,263 @@ a { color: inherit; }
   .hero h1 { font-size: 4.5rem; }
   .footer-map { height: 260px; }
   .hero-inner { gap: 4rem; grid-template-columns: 1.4fr 1fr; }
+}
+
+
+/* ============================================================
+   HERO SLIDESHOW
+   Three slides that pan top -> bottom, then crossfade.
+   Each layer is 140% of the hero's height, so there is always
+   vertical room to travel. background-size:cover guarantees the
+   frame is filled edge to edge at every aspect ratio — there is
+   no scenario that produces blank space at the sides.
+   ============================================================ */
+.hero-slides {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.hero-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 140%;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+.hero-slide-1 {
+  background-image: url("assets/hero-1.jpg");
+  opacity: 1;
+  animation: heroFade1 27s linear infinite, heroPan1 27s linear infinite;
+}
+.hero-slide-2 {
+  background-image: url("assets/hero-2.jpg");
+  opacity: 0;
+  animation: heroFade2 27s linear infinite, heroPan2 27s linear infinite;
+}
+.hero-slide-3 {
+  background-image: url("assets/hero-3.jpg");
+  opacity: 0;
+  animation: heroFade3 27s linear infinite, heroPan3 27s linear infinite;
+}
+
+/* Fixed to the viewport, so it does not travel with the slides */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(30, 39, 73, 0.52) 0%,
+    rgba(30, 39, 73, 0.60) 45%,
+    rgba(30, 39, 73, 0.88) 90%,
+    var(--space-indigo) 100%
+  );
+}
+
+/* Each slide owns a 9s slot of the 27s cycle; fades last ~2s. */
+@keyframes heroFade1 {
+  0%, 25.93% { opacity: 1; }
+  33.33%     { opacity: 0; }
+  92.59%     { opacity: 0; }
+  100%       { opacity: 1; }
+}
+@keyframes heroFade2 {
+  0%, 25.93%     { opacity: 0; }
+  33.33%, 59.26% { opacity: 1; }
+  66.67%, 100%   { opacity: 0; }
+}
+@keyframes heroFade3 {
+  0%, 59.26%     { opacity: 0; }
+  66.67%, 92.59% { opacity: 1; }
+  100%           { opacity: 0; }
+}
+
+/* -28.571% of a 140%-tall layer lands exactly on its bottom edge.
+   The reset to 0 happens on the frame after the slide is invisible. */
+@keyframes heroPan1 {
+  0%      { transform: translateY(0); }
+  33.33%  { transform: translateY(-28.571%); }
+  33.34%  { transform: translateY(0); }
+  100%    { transform: translateY(0); }
+}
+@keyframes heroPan2 {
+  0%, 33.33% { transform: translateY(0); }
+  66.67%     { transform: translateY(-28.571%); }
+  66.68%     { transform: translateY(0); }
+  100%       { transform: translateY(0); }
+}
+@keyframes heroPan3 {
+  0%, 66.67% { transform: translateY(0); }
+  100%       { transform: translateY(-28.571%); }
+}
+
+/* Motion-sensitive visitors get a single still frame. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide-1 { opacity: 1; }
+  .hero-slide-2,
+  .hero-slide-3 { opacity: 0; }
+}
+
+/* ============================================================
+   COMING SOON  (unavailable sessions / bundles)
+   ============================================================ */
+.is-coming-soon { opacity: 0.6; }
+.is-coming-soon:hover { border-color: var(--peri-hair); transform: none; }
+.is-coming-soon .rate-price,
+.is-coming-soon .bundle-amount,
+.is-coming-soon .membership-amount {
+  color: var(--peri-dim);
+  text-decoration: line-through;
+  text-decoration-color: rgba(228, 217, 255, 0.55);
+  text-decoration-thickness: 2px;
+}
+.is-coming-soon .bundle-was { display: none; }
+.coming-soon-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--periwinkle);
+  border: 1px solid var(--periwinkle);
+  padding: 0.55rem 0.9rem;
+  border-radius: 3px;
+}
+
+/* Clickable group-discount tiles */
+a.discount-tile { text-decoration: none; }
+a.discount-tile:hover { transform: translateY(-2px); }
+.discount-tile { transition: border-color 0.25s ease, transform 0.25s ease; }
+.discount-cta {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--periwinkle);
+  font-weight: 600;
+  margin-top: 0.35rem;
+}
+
+/* Single-perk referral card */
+.referral-card.single { text-align: center; }
+@media (min-width: 768px) {
+  .referral-card.single { flex-direction: column; }
+}
+
+
+/* ============================================================
+   BOOKING FORM PAGE
+   ============================================================ */
+.form-wrap { max-width: 760px; margin: 0 auto; width: 100%; }
+.form-shell {
+  background: rgba(30, 39, 73, 0.6);
+  border: 1px solid var(--peri-hair);
+  border-radius: 8px;
+  padding: 1.75rem 1.25rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.pay-notice {
+  display: flex; align-items: flex-start; gap: 0.9rem;
+  padding: 1.15rem 1.25rem;
+  background: rgba(228, 217, 255, 0.07);
+  border: 1px solid var(--peri-hair);
+  border-left: 2px solid var(--periwinkle);
+  border-radius: 4px;
+  margin-bottom: 2rem;
+}
+.pay-notice svg { color: var(--periwinkle); flex-shrink: 0; margin-top: 0.2rem; }
+.pay-notice-body { min-width: 0; }
+.pay-notice-title {
+  font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--periwinkle); font-weight: 600; margin-bottom: 0.35rem;
+}
+.pay-notice p { font-size: 0.9rem; color: var(--peri-dim); margin: 0; line-height: 1.55; }
+
+.form-group { border: none; padding: 0; margin: 0 0 2.25rem; }
+.form-group:last-of-type { margin-bottom: 1.75rem; }
+.form-group legend {
+  padding: 0; margin-bottom: 0.35rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--periwinkle); font-weight: 600;
+}
+.form-group-note {
+  font-size: 0.85rem; color: var(--peri-dim);
+  margin-bottom: 1.25rem; padding-bottom: 1rem;
+  border-bottom: 1px solid var(--peri-hair);
+}
+.field-row { display: flex; flex-direction: column; gap: 1.1rem; margin-bottom: 1.1rem; }
+.field-row:last-child { margin-bottom: 0; }
+.field { display: flex; flex-direction: column; gap: 0.45rem; min-width: 0; }
+.field label { font-size: 0.8rem; font-weight: 500; color: var(--ghost-white); }
+.field .req { color: var(--periwinkle); margin-left: 0.15rem; }
+.field .hint { font-size: 0.75rem; color: var(--peri-dim); font-weight: 400; }
+.field input, .field select, .field textarea {
+  background: rgba(30, 39, 73, 0.85);
+  border: 1px solid var(--peri-hair);
+  border-radius: 4px;
+  padding: 0.85rem 1rem;
+  color: var(--ghost-white);
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field input::placeholder, .field textarea::placeholder { color: rgba(228, 217, 255, 0.4); }
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--periwinkle); background: rgba(30, 39, 73, 0.95);
+}
+.field textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: ''; position: absolute; right: 1rem; top: 50%;
+  width: 8px; height: 8px;
+  border-right: 1.5px solid var(--periwinkle);
+  border-bottom: 1.5px solid var(--periwinkle);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+.field select { padding-right: 2.5rem; cursor: pointer; }
+.field select option { background: var(--space-indigo); color: var(--ghost-white); }
+.field select option:disabled { color: rgba(228, 217, 255, 0.35); }
+
+.form-actions {
+  padding-top: 1.5rem; border-top: 1px solid var(--peri-hair);
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.form-actions .btn { width: 100%; padding: 1.1rem 1.5rem; }
+.form-fineprint { font-size: 0.8rem; color: var(--peri-dim); text-align: center; line-height: 1.5; }
+
+.hp-field {
+  position: absolute !important; left: -9999px !important;
+  width: 1px; height: 1px; overflow: hidden;
+}
+.form-status {
+  display: none; padding: 1.5rem; border-radius: 6px;
+  margin-bottom: 1.75rem; border: 1px solid;
+}
+.form-status.show { display: block; }
+.form-status h2 { font-size: 1.2rem; margin-bottom: 0.4rem; color: var(--ghost-white); }
+.form-status p { font-size: 0.92rem; margin: 0; line-height: 1.6; color: rgba(250, 250, 255, 0.85); }
+.form-status.success { background: rgba(107, 171, 119, 0.14); border-color: rgba(107, 171, 119, 0.6); }
+.form-status.error { background: rgba(224, 161, 90, 0.14); border-color: rgba(224, 161, 90, 0.6); }
+.form-shell.is-submitting { opacity: 0.6; pointer-events: none; }
+
+@media (min-width: 640px) {
+  .form-shell { padding: 2.5rem 2.25rem; }
+  .field-row.two-up { flex-direction: row; gap: 1.25rem; }
+  .field-row.two-up .field { flex: 1; }
+  .form-actions { flex-direction: row; align-items: center; justify-content: space-between; gap: 1.5rem; }
+  .form-actions .btn { width: auto; flex-shrink: 0; }
+  .form-fineprint { text-align: left; }
 }
