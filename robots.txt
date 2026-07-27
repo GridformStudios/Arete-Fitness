@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-
-# Booking form — intentionally kept out of search results.
-Disallow: /book
-Disallow: /book.html
-
-Sitemap: https://www.aretefitness.com/sitemap.xml
